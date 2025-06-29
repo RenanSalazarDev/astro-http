@@ -3,13 +3,19 @@
 import type { APIRoute } from 'astro'
 import { getCollection } from 'astro:content';
 
-export const prerender = true;
+export const prerender = false;
 export const GET: APIRoute = async ({ params, request }) => {
 
 
+
+
+  const url = new URL(request.url);
+  const slug = url.searchParams.get('slug');
+
   const blogPosts = await getCollection('blog');
+  const myPost = blogPosts.find((post) => post.id === slug)
   
-  console.log(request);
+  //console.log(request);
 
   // const posts = blogPosts.map(post => ({
   //   title: post.data.title,
@@ -19,7 +25,9 @@ export const GET: APIRoute = async ({ params, request }) => {
   //   heroImage: post.data.heroImage
   // }));
 
-  return new Response(JSON.stringify(blogPosts), {
+  //console.log(posts);
+
+  return new Response(JSON.stringify(myPost), {
      status: 200,
      headers: {
        'Content-Type': 'application/json'
